@@ -10,6 +10,12 @@ jobs:
   dev-deploy:
     if: github.ref == 'refs/heads/dev'
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    env:
+      AWS_REGOIN: us-east-1
+      AWS_WEB_IDENTITY_TOKEN_FILE: /tmp/awstoken
     steps:
       - uses: actions/checkout@master
       - uses: actions/setup-node@master
