@@ -1,0 +1,25 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - dev
+
+jobs:
+
+  dev-deploy:
+    if: github.ref == 'refs/heads/dev'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - uses: actions/setup-node@master
+        with:
+          node-version: 18
+      - name: build
+        run: |
+          echo ${{secrets.DEV_CONFIG_JSON}} > config.json
+          npm install
+          npm run build
+      - name: upload
+        run: |
+          aws s3 sync dist/ s3://${{secrets.DEV_S3_BUCKET}} --acl public-read --follow-symlinks --delete
