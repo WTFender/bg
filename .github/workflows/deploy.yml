@@ -1,6 +1,7 @@
 name: Deploy
 
 on:
+  workflow
   push:
     branches:
       - dev
