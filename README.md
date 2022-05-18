@@ -1,24 +1,22 @@
 # bg
 
-## Project setup
+## Dev
+
+Setup `config.json`.
+
+```
+{
+    "mockApi": false,
+    "apiUrl": "https://apiUrl/",
+    "appUrl": "https://appUrl/",
+    "authority": "https://oidcServer/",
+    "client_id": "clientId",
+    "response_type": "code",
+    "scope": "openid profile groups"
+}
+```
+
 ```
 npm install
-```
-
-### Compiles and hot-reloads for development
-```
 npm run serve
 ```
-
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
