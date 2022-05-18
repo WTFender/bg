@@ -17,7 +17,7 @@ jobs:
           node-version: 18
       - name: build
         run: |
-          echo ${{secrets.DEV_CONFIG_JSON}} > config.json
+          echo "${{secrets.DEV_CONFIG_JSON}}" > config.json
           npm install
           npm run build
       - name: upload
