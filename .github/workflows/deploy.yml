@@ -16,6 +16,8 @@ jobs:
     env:
       AWS_REGION: us-east-1
       AWS_WEB_IDENTITY_TOKEN_FILE: /tmp/awstoken
+      AWS_ROLE_ARN: ${{ secrets.DEV_AWS_ROLE_ARN }}
+      S3_BUCKET: ${{ secrets.DEV_S3_BUCKET }}
     steps:
       - uses: actions/checkout@master
       - uses: actions/setup-node@master
@@ -29,4 +31,4 @@ jobs:
       - name: upload
         run: |
           curl -H "Authorization: bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" "$ACTIONS_ID_TOKEN_REQUEST_URL" | jq -r '.value' > $AWS_WEB_IDENTITY_TOKEN_FILE
-          aws s3 sync dist/ s3://${{secrets.DEV_S3_BUCKET}} --acl public-read --follow-symlinks --delete
+          aws s3 sync dist/ s3://$S3_BUCKET --acl public-read --follow-symlinks --delete
