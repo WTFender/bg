@@ -60,6 +60,11 @@ export default {
         )
       }
     },
+    setLoaded(){
+      if (Object.keys(this.user).length > 0 && this.profiles.length > 0){
+        this.loaded = true
+      }
+    },
     setUser(resp){
       this.user = resp.user
       sessionStorage.setItem("user", JSON.stringify(this.user))
@@ -67,7 +72,6 @@ export default {
     setProfiles(resp){
       this.profiles = this.sanitizeProfiles(resp.profiles)
       sessionStorage.setItem("profiles", JSON.stringify(this.profiles))
-      this.loaded = true
     },
     notifyErr(msg) {
       this.$q.notify({
@@ -85,6 +89,14 @@ export default {
         }
       }
       return profiles;
+    }
+  }, 
+  watch: {
+    profiles(){
+      this.setLoaded()
+    },
+    user(){
+      this.setLoaded()
     }
   },
   data() {
