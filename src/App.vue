@@ -16,7 +16,7 @@
     </q-header>
 
     <q-page-container>
-      <router-view :profiles="profiles" :user="user" />
+      <router-view :loaded="loaded" :profiles="profiles" :user="user" />
     </q-page-container>
 
     <q-footer bordered class="bg-white text-black">
@@ -32,40 +32,49 @@
 </template>
 
 <script>
-import { ref } from "vue";
-import MockProfiles from "./mock/profiles.json";
-import MockUser from "./mock/user.json";
 export default {
   setup() {
-    const leftDrawerOpen = ref(false);
-    return {
-      leftDrawerOpen,
-      toggleLeftDrawer() {
-        leftDrawerOpen.value = !leftDrawerOpen.value;
-      },
-    };
+
   },
   created(){
-    this.user = MockUser
-    this.profiles = this.sanitizeProfiles(MockProfiles)
+    this.$oidc.events.addUserLoaded(function() {
+      this.load
+    })
+    
     if (this.$oidc.isAuthenticated){
-      this.$api.getDirectory(
-        this.$oidc.accessToken,
-        // success
-        function(response){
-          this.user = response.user
-          this.profiles = response.profiles
-        },
-        // fail
-        this.notify
-      )
+      this.load()
     }
   },
   methods: {
+    load(){
+      this.$api.getUser(
+        this.$oidc.accessToken,
+        this.setUser,
+        this.notifyErr
+      )
+      this.$api.getDirectory(
+        this.$oidc.accessToken,
+        this.setProfiles,
+        this.notifyErr
+      )
+      this.loaded = true
+    },
+    setUser(resp){
+      this.user = resp.user
+    },
+    setProfiles(resp){
+      this.profiles = this.sanitizeProfiles(resp.profiles)
+    },
     notify(msg) {
       this.$q.notify({
         message: msg,
         color: 'primary'
+      })
+    },
+    notifyErr(msg) {
+      this.$q.notify({
+        message: msg,
+        color: 'negative'
       })
     },
     sanitizeProfiles(profiles) {
@@ -82,6 +91,7 @@ export default {
   },
   data() {
     return {
+      loaded: false,
       profiles: [],
       user: {}
     }

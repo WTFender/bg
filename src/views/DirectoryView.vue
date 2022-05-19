@@ -169,7 +169,7 @@ import BlankCard from "../components/BlankCard.vue";
 export default {
   name: "DirectoryView",
   components: { VendorCard, BlankCard },
-  props: {profiles: Array, user: Object},
+  props: {loaded: Boolean, profiles: Array, user: Object},
   setup() {
     const leftDrawerOpen = ref(false);
     return {
@@ -180,8 +180,6 @@ export default {
     };
   },
   created() {
-    this.loaded = true;
-    // setTimeout(() => this.loaded = true, 500) // simulate loading time
   },
   methods: {
     searchProfiles(profiles) {
@@ -352,7 +350,6 @@ export default {
   },
   data() {
     return {
-      loaded: false,
       currentPage: 1,
       maxPageProfiles: 12,
       search: null,

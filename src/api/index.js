@@ -36,18 +36,6 @@ class Api {
             case 'LobbyMax':
                 showError(title, 'Max number of lobbies created (3)');
                 break
-            case 'LobbyMaxUsers':
-                showError(title, 'Lobby is at max capacity');
-                break
-            case 'LobbyNotFound':
-                showError(title, 'Lobby does not exist');
-                break
-            case 'LobbyUserExists':
-                showError(title, 'User is already in the lobby');
-                break
-            case 'LobbyPermissions':
-                showError(title, 'Invalid permissions for this lobby');
-                break
             default:
                 showError('Error', 'Unknown error occurred')
         }
@@ -77,71 +65,14 @@ class Api {
         }).then((response) => callback(response.data))
     }
 
+    getUser(token, callback){
+        this.get('/user', token, callback)
+    }
+
     getDirectory(token, callback){
         this.get('/directory', token, callback)
     }
 
-    /*
-    listLobbies(token, callback) {
-        if (MOCK) {
-            return MOCK_DELAY(callback, MOCK_LOBBIES)
-        } else {
-            this.get('/lobby', token, callback)
-        }
-    }
-
-    
-    getLobby(token, lobbyId, callback) {
-        if (MOCK) {
-            return MOCK_DELAY(callback, MOCK_LOBBY(lobbyId))
-        } else {
-            var data = { 'lobbyId': lobbyId }
-            this.post('/lobby', token, data, callback)
-        }
-    }
-
-    declineLobby(token, lobbyId, groupId, callback) {
-        if (MOCK) {
-            return MOCK_DELAY(callback, MOCK_LOBBY(lobbyId))
-        } else {
-            this.post('/lobby/decline', token, { 'lobbyId': lobbyId, 'groupId': groupId }, callback)
-        }
-    }
-
-    joinLobby(token, lobbyId, groupId, callback) {
-        if (MOCK) {
-            return MOCK_DELAY(callback, MOCK_LOBBY(lobbyId))
-        } else {
-            this.post('/lobby/join', token, { 'lobbyId': lobbyId, 'groupId': groupId }, callback)
-        }
-    }
-
-    deleteLobby(token, lobbyId, groupId, callback) {
-        if (MOCK) {
-            return MOCK_DELAY(callback, lobbyId)
-        } else {
-            this.post('/lobby/delete', token, { 'lobbyId': lobbyId, 'groupId': groupId }, callback)
-        }
-    }
-
-    newLobby(token, groupId, callback) {
-        if (MOCK) {
-            showError('test', 'test')
-            return MOCK_DELAY(callback, MOCK_LOBBY(`test${Math.round(Math.random() * 100)}`))
-        } else {
-            this.post('/lobby/new', token, groupId, callback)
-        }
-    }
-
-    login(oauth, callback) {
-        if (MOCK) {
-            return MOCK_DELAY(callback, MOCK_LOGIN)
-        } else {
-            var data = { 'oauth': oauth }
-            this.post('/session', 'login', data, callback)
-        }
-    }
-    */
 }
 
 export default new Api
