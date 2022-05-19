@@ -162,7 +162,6 @@
 </template>
 
 <script>
-import { ref } from "vue";
 import VendorCard from "../components/VendorCard.vue";
 import BlankCard from "../components/BlankCard.vue";
 
@@ -170,16 +169,10 @@ export default {
   name: "DirectoryView",
   components: { VendorCard, BlankCard },
   props: {loaded: Boolean, profiles: Array, user: Object},
-  setup() {
-    const leftDrawerOpen = ref(false);
-    return {
-      leftDrawerOpen,
-      toggleLeftDrawer() {
-        leftDrawerOpen.value = !leftDrawerOpen.value;
-      },
-    };
-  },
   created() {
+    if (this.$oidc.isAuthenticated){
+      this.$emit('load')
+    }
   },
   methods: {
     searchProfiles(profiles) {
@@ -373,6 +366,7 @@ export default {
       }
     };
   },
+  emits: ['load']
 };
 </script>
 

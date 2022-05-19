@@ -16,7 +16,12 @@
     </q-header>
 
     <q-page-container>
-      <router-view :loaded="loaded" :profiles="profiles" :user="user" />
+      <router-view
+        :loaded="loaded"
+        :profiles="profiles"
+        :user="user"
+        @load="load"
+      />
     </q-page-container>
 
     <q-footer bordered class="bg-white text-black">
@@ -33,43 +38,36 @@
 
 <script>
 export default {
-  setup() {
-
-  },
-  created(){
-    this.$oidc.events.addUserLoaded(function() {
-      this.load
-    })
-    
-    if (this.$oidc.isAuthenticated){
-      this.load()
-    }
-  },
   methods: {
     load(){
-      this.$api.getUser(
-        this.$oidc.accessToken,
-        this.setUser,
-        this.notifyErr
-      )
-      this.$api.getDirectory(
-        this.$oidc.accessToken,
-        this.setProfiles,
-        this.notifyErr
-      )
-      this.loaded = true
+      // check session storage
+      if (sessionStorage.getItem("user") && sessionStorage.getItem("profiles")){
+        console.log('session storage found')
+        this.user = JSON.parse(sessionStorage.getItem("user"))
+        this.profiles = JSON.parse(sessionStorage.getItem("profiles"))
+        this.loaded = true
+      } else {
+        // retrieve from api
+        this.$api.getUser(
+          this.$oidc.accessToken,
+          this.setUser,
+          this.notifyErr
+        )
+        this.$api.getDirectory(
+          this.$oidc.accessToken,
+          this.setProfiles,
+          this.notifyErr
+        )
+      }
     },
     setUser(resp){
       this.user = resp.user
+      sessionStorage.setItem("user", JSON.stringify(this.user))
     },
     setProfiles(resp){
       this.profiles = this.sanitizeProfiles(resp.profiles)
-    },
-    notify(msg) {
-      this.$q.notify({
-        message: msg,
-        color: 'primary'
-      })
+      sessionStorage.setItem("profiles", JSON.stringify(this.profiles))
+      this.loaded = true
     },
     notifyErr(msg) {
       this.$q.notify({

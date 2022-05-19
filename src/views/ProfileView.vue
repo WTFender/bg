@@ -58,6 +58,7 @@ import { ref } from "vue";
 export default {
   name: 'ProfileView',
   props: {
+    loaded: Boolean,
     profileId: String,
     profiles: Array,
     user: Object
@@ -87,7 +88,8 @@ export default {
     return {
       profile: {}
     }
-  }
+  },
+  emits: ['load']
 };
 </script>
 
