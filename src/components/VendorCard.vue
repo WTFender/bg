@@ -25,8 +25,17 @@
       />
     </q-card-section>
     <q-card-section class="row items-center q-pt-none">
-      <div class="col-8 vendor-title text-subtitle2">{{profile.title}}</div>
-      <div class="row justify-end col-4">
+      <div class="col-6 vendor-title text-subtitle2">{{profile.title}}</div>
+      <div class="row justify-end col-3">
+        <q-btn dense flat rounded disable
+          class="no-pointer-events"
+          icon-right="comment"
+          size="md"
+          color="primary"
+          :label="profile.votes"
+        />
+      </div>
+      <div class="row justify-end col-3">
         <q-btn dense flat rounded
           :icon-right="voted === true ? 'favorite' : 'favorite_border'"
           size="md"
@@ -111,7 +120,7 @@ export default {
   color: $grey
 .tag
   background: $accent
-  color: #58595b
+  color: $text
 .hidden-tag
   display: none
 .logo
