@@ -8,7 +8,7 @@
           style="height: 100px"
         >
           <q-avatar>
-            <img src="logo.png" />
+            <img src="./assets/logo.png" />
           </q-avatar>
           HeaderTitle
         </q-toolbar-title>
