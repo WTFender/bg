@@ -1,10 +1,13 @@
 import MockProfiles from "./profiles.json";
 import MockUser from "./user.json";
+import { Notify } from 'quasar'
 
 function MOCK_DELAY(callback, response, notify, endpoint) {
     console.log(endpoint)
-    notify(endpoint)
-    // simulate delay
+    Notify.create({
+        message: endpoint,
+        color: 'primary'
+    })
     return setTimeout(function() { callback(response) }, 500)
 }
 

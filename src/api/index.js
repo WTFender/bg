@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { Notify } from 'quasar'
 
 var baseurl = 'https://api.bg.dev.wtfender.com'
 
@@ -18,28 +19,31 @@ class Api {
     constructor() {
         let service = axios.create()
         service.defaults.withCredentials = true
-        service.interceptors.response.use(this.handleSuccess, this.handleError)
+        service.interceptors.response.use(this.success, this.error)
         service.defaults.baseURL = baseurl
         this.service = service
     }
 
-    handleSuccess(response) {
+    success(response) {
         return response
     }
 
-    handleError = (error) => {
-        console.log(error)
-        /*
-        TODO 401 & 5xx
-        var title = error.response.data
-        switch (title) {
-            case 'LobbyMax':
-                showError(title, 'Max number of lobbies created (3)');
-                break
-            default:
-                showError('Error', 'Unknown error occurred')
+    error = (error) => {
+        var code = error.response.status
+        var msg = ''
+        if (code == 0){
+            msg = 'cors error'
+        } else if (code >= 500) {
+            msg = 'server error'
+        } else if (code >= 400) {
+            msg = 'permissions error'
+        } else {
+            msg = 'unknown error'
         }
-        */
+        Notify.create({
+            message: msg,
+            color: 'negative'
+        })
         return Promise.reject(error)
     }
 
