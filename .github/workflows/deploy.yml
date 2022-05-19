@@ -18,6 +18,8 @@ jobs:
       AWS_WEB_IDENTITY_TOKEN_FILE: /tmp/awstoken
       AWS_ROLE_ARN: ${{ secrets.DEV_AWS_ROLE_ARN }}
       S3_BUCKET: ${{ secrets.DEV_S3_BUCKET }}
+      CLOUDFRONT_ID: ${{ secrets.DEV_CLOUDFRONT_ID }}
+      CONFIG: ${{ secrets.DEV_CONFIG_JSON }}
     steps:
       - uses: actions/checkout@master
       - uses: actions/setup-node@master
@@ -25,10 +27,11 @@ jobs:
           node-version: 18
       - name: build
         run: |
-          echo "${{secrets.DEV_CONFIG_JSON}}" | base64 --decode > config.json
+          echo "${CONFIG}" | base64 --decode > config.json
           npm install
           npm run build
       - name: upload
         run: |
           curl -H "Authorization: bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" "$ACTIONS_ID_TOKEN_REQUEST_URL" | jq -r '.value' > $AWS_WEB_IDENTITY_TOKEN_FILE
           aws s3 sync dist/ s3://$S3_BUCKET --follow-symlinks --delete
+          aws cloudfront create-invalidation --distribution-id $CLOUDFRONT_ID --paths "/*"
