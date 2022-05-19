@@ -29,7 +29,7 @@
         <q-toolbar-title>
           <div>FooterTitle</div>
         </q-toolbar-title>
-        <q-btn @click="this.$oidc.signOut()">Logout</q-btn>
+        <q-btn class="q-mx-md" @click="this.logout()">Logout</q-btn>
       </q-toolbar>
     </q-footer>
 
@@ -37,27 +37,35 @@
 </template>
 
 <script>
+// 1652982771027
 export default {
+  created(){
+    // session expiration
+    setTimeout(()=>{
+      this.logout()
+    },this.expires);
+  },
   methods: {
+    logout(){
+      sessionStorage.removeItem("user")
+      sessionStorage.removeItem("profiles")
+      sessionStorage.removeItem("expires")
+      this.$oidc.signOut()
+    },
     load(){
       // check session storage
-      if (sessionStorage.getItem("user") && sessionStorage.getItem("profiles")){
+      if (sessionStorage.getItem("user") &&
+          sessionStorage.getItem("profiles") &&
+          (sessionStorage.getItem("expires") > Date.now())
+          ){
         console.log('session storage found')
         this.user = JSON.parse(sessionStorage.getItem("user"))
         this.profiles = JSON.parse(sessionStorage.getItem("profiles"))
         this.loaded = true
       } else {
         // retrieve from api
-        this.$api.getUser(
-          this.$oidc.accessToken,
-          this.setUser,
-          this.notifyErr
-        )
-        this.$api.getDirectory(
-          this.$oidc.accessToken,
-          this.setProfiles,
-          this.notifyErr
-        )
+        this.$api.getUser(this.$oidc.accessToken, this.setUser)
+        this.$api.getDirectory(this.$oidc.accessToken, this.setProfiles)
       }
     },
     setLoaded(){
@@ -72,6 +80,7 @@ export default {
     setProfiles(resp){
       this.profiles = this.sanitizeProfiles(resp.profiles)
       sessionStorage.setItem("profiles", JSON.stringify(this.profiles))
+      sessionStorage.setItem("expires", (Date.now()+this.expires))
     },
     notifyErr(msg) {
       this.$q.notify({
@@ -102,6 +111,7 @@ export default {
   data() {
     return {
       loaded: false,
+      expires: (60 * 60 * 1000), // default 1 hour, oidc overrides
       profiles: [],
       user: {}
     }
@@ -113,10 +123,10 @@ export default {
 html
   overflow-y: overlay
 .q-layout
-  background: #fbfbfb
-  color: #58595b
+  background: $background
+  color: $text
 .q-toolbar
-  background: #fbfbfb
+  background: $background
 .q-footer > .q-toolbar
-  color: #58595b
+  color: $text
 </style>
