@@ -3,18 +3,6 @@ import { Notify } from 'quasar'
 
 var baseurl = 'https://api.bg.dev.wtfender.com'
 
-/*
-function showError(title, msg) {
-    var toast = document.getElementById('error')
-    document.getElementById('errorTitle').innerHTML = title
-    document.getElementById('errorMsg').innerHTML = msg
-    toast.style.opacity = "1"
-    setTimeout(function() {
-        toast.style.opacity = "0"
-    }, 15000)
-}
-*/
-
 class Api {
     constructor() {
         let service = axios.create()
