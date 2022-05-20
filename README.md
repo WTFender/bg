@@ -12,7 +12,7 @@ Setup `config.json`.
     "authority": "https://oidcServer/",
     "client_id": "clientId",
     "response_type": "code",
-    "scope": "openid profile groups"
+    "scope": "openid profile email groups"
 }
 ```
 
