@@ -66,6 +66,7 @@ export default {
         // retrieve from api
         this.$api.getUser(this.$oidc.accessToken, this.setUser)
         this.$api.getDirectory(this.$oidc.accessToken, this.setProfiles)
+        sessionStorage.setItem("expires", (Date.now()+this.expires))
       }
     },
     setLoaded(){
@@ -74,13 +75,12 @@ export default {
       }
     },
     setUser(resp){
-      this.user = resp.user
+      this.user = resp
       sessionStorage.setItem("user", JSON.stringify(this.user))
     },
     setProfiles(resp){
-      this.profiles = this.sanitizeProfiles(resp.profiles)
+      this.profiles = this.sanitizeProfiles(resp)
       sessionStorage.setItem("profiles", JSON.stringify(this.profiles))
-      sessionStorage.setItem("expires", (Date.now()+this.expires))
     },
     notifyErr(msg) {
       this.$q.notify({
