@@ -13,6 +13,14 @@
         "votes": 1,
         "comments": [
             {
+                "user": "anonymous",
+                "comment": "123"
+            },
+            {
+                "user": "anonymous",
+                "comment": "abc"
+            },
+            {
                 "user": "wtfender.cs@gmail.com",
                 "comment": "Resentful comment!"
             }
@@ -34,10 +42,6 @@
             {
                 "user": "anonymous",
                 "comment": "My fave."
-            },
-            {
-                "user": "wtfender.cs@gmail.com",
-                "comment": "A nasty critique!"
             },
             {
                 "user": "anonymous",

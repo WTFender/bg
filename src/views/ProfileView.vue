@@ -50,21 +50,17 @@
 
       <div>
         <p class="text-h5 text-weight-medium q-pt-lg">Comments</p>
+        <!--- Leave a comment --->
         <q-select borderless
-          v-for="c, i in profile.comments"
-          :key="i"
-          :class="isUserComment(c.user) ? 'edit q-pl-sm' : 'q-ml-sm'"
-          :clearable="isUserComment(c.user)"
-          :readonly="!isUserComment(c.user)"
-          @clear="deleteUserComment"
-          dropdown-icon="none"
-          v-model="c.comment"
-          :label="c.user"
+          v-if="!hasCommented"
+          :key="'newComment'"
+          :class="'edit q-pl-sm q-pr-lg'"
+          dropdown-icon="edit"
+          v-model="comment"
+          :label="user.email"
         >
         <q-popup-edit buttons
           class="q-py-none"
-          v-if="isUserComment(c.user)"
-          v-model="c.comment"
           v-slot="scope"
           @save="updateUserComment"
         >
@@ -77,6 +73,43 @@
         </q-popup-edit>
 
         </q-select>
+        
+        <!--- display user comment --->
+        <q-select borderless
+          v-if="hasCommented"
+          :key="'comment'"
+          :class="'edit q-pl-sm'"
+          dropdown-icon="none"
+          :clearable="true"
+          @clear="deleteUserComment"
+          v-model="comment"
+          :label="user.email"
+        >
+        <q-popup-edit buttons
+          class="q-py-none"
+          v-slot="scope"
+          @save="updateUserComment"
+        >
+          <q-input
+            v-model="scope.value"
+            autofocus
+            counter
+            @keyup.enter.stop
+          />
+        </q-popup-edit>
+
+        </q-select>
+
+        <!--- display comments --->
+        <q-select borderless
+          v-for="c, i in profile.comments"
+          :key="'comment'+i"
+          class="q-ml-sm"
+          :readonly="true"
+          dropdown-icon="none"
+          v-model="c.comment"
+          :label="c.user"
+        />
       </div>
     
     </div>
@@ -115,6 +148,16 @@ export default {
     }
     // or 404
     if (!profileFound){this.$router.push({name:'404'})}
+    
+    var comments = this.profile.comments
+    for (var c in comments){
+      if (comments[c].user == this.user.email){
+        this.hasCommented = true
+        this.comment = comments[c].comment
+        comments.splice(c, 1)
+      }
+    }
+    this.profile.comments = comments
     //this.loadLogo('test.jpg')
   },
   methods: {
@@ -135,8 +178,12 @@ export default {
           this.profile.comments.splice(c, 1)
         }
       }
+      this.comment = 'Leave a comment...'
+      this.hasCommented = false
     },
     updateUserComment(comment){
+      this.comment = comment
+      this.hasCommented = true
       this.$emit('updateComment', this.profile.id, comment)
     },
     isUserComment(user) {
@@ -149,6 +196,7 @@ export default {
   },
   data (){
     return {
+      comment: 'Leave a comment...',
       hasCommented: false,
       profile: {},
       logoUrl: ''
