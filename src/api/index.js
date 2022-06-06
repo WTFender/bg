@@ -65,6 +65,11 @@ class Api {
         this.get('/directory', token, callback)
     }
 
+    updateComment(token, profileId, comment, callback){
+        var payload = {'profileId': profileId, 'comment': comment}
+        this.post('/comment', token, payload, callback)
+    }
+
 }
 
 export default new Api

@@ -74,7 +74,7 @@ export default {
       this.$api.deleteComment(this.$oidc.accessToken, profileId, this.setProfile)
     },
     updateComment(profileId, comment){
-      this.$api.updateComment(this.$oidc.accessToken, {'id': profileId, 'comment': comment}, this.setProfile)
+      this.$api.updateComment(this.$oidc.accessToken, profileId, comment, this.setProfile)
     },
     setLoaded(){
       if (Object.keys(this.user).length > 0 && this.profiles.length > 0){

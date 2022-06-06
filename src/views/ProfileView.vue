@@ -59,7 +59,7 @@
           @clear="deleteUserComment"
           dropdown-icon="none"
           v-model="c.comment"
-          :label="c.user.toLowerCase()"
+          :label="c.user"
         >
         <q-popup-edit buttons
           class="q-py-none"

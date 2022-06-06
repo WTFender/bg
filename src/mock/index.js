@@ -26,10 +26,9 @@ class MockApi {
         return MOCK_DELAY(callback, MockProfile, 'mock::delete::/comment')
     }
 
-    updateComment(token, options, callback){
+    updateComment(token, profileId, comment, callback){
         var profile = MockProfile
-        profile.comments.push({'user': MockUser.id, 'comment': options['comment']})
-        console.log(profile)
+        profile.comments.push({'user': MockUser.id, 'comment': comment['comment']})
         return MOCK_DELAY(callback, profile, 'mock::post::/comment')
     }
 
