@@ -21,6 +21,8 @@
         :profiles="profiles"
         :user="user"
         @load="load"
+        @deleteComment="deleteComment"
+        @updateComment="updateComment"
       />
     </q-page-container>
 
@@ -37,7 +39,6 @@
 </template>
 
 <script>
-// 1652982771027
 export default {
   created(){
     // session expiration
@@ -69,6 +70,12 @@ export default {
         sessionStorage.setItem("expires", (Date.now()+this.expires))
       }
     },
+    deleteComment(profileId){
+      this.$api.deleteComment(this.$oidc.accessToken, profileId, this.setProfile)
+    },
+    updateComment(profileId, comment){
+      this.$api.updateComment(this.$oidc.accessToken, {'id': profileId, 'comment': comment}, this.setProfile)
+    },
     setLoaded(){
       if (Object.keys(this.user).length > 0 && this.profiles.length > 0){
         this.loaded = true
@@ -77,6 +84,17 @@ export default {
     setUser(resp){
       this.user = resp
       sessionStorage.setItem("user", JSON.stringify(this.user))
+    },
+    setProfile(resp){
+      var profile = this.sanitizeProfiles([resp])[0]
+      var profiles = JSON.parse(JSON.stringify(this.profiles))
+      for (var p in profiles){
+        if (profile.id == profiles[p].id){
+          profiles[p] = profile
+        }
+      }
+      this.profiles = profiles
+      sessionStorage.setItem("profiles", JSON.stringify(this.profiles))
     },
     setProfiles(resp){
       this.profiles = this.sanitizeProfiles(resp)
@@ -95,6 +113,9 @@ export default {
         }
         if (!("votes" in profiles[p])) {
           profiles[p].votes = 0;
+        }
+        if (!("comments" in profiles[p])) {
+          profiles[p].comments = [];
         }
       }
       return profiles;

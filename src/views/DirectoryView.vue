@@ -252,12 +252,6 @@ export default {
     },
     sortByMostVoted(profiles) {
       return profiles.sort(function (a, b) {
-        if (!("votes" in a)) {
-          a.votes = 0;
-        } // if 'votes' dne
-        if (!("votes" in b)) {
-          b.votes = 0;
-        } // assume 0
         return b.votes - a.votes;
       });
     },

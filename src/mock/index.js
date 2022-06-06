@@ -1,8 +1,9 @@
 import MockProfiles from "./profiles.json";
+import MockProfile from "./profile.json";
 import MockUser from "./user.json";
 import { Notify } from 'quasar'
 
-function MOCK_DELAY(callback, response, notify, endpoint) {
+function MOCK_DELAY(callback, response, endpoint) {
     console.log(endpoint)
     Notify.create({
         message: endpoint,
@@ -13,12 +14,28 @@ function MOCK_DELAY(callback, response, notify, endpoint) {
 
 class MockApi {
 
-    getUser(token, callback, notify){
-        return MOCK_DELAY(callback, MockUser, notify, 'mock::get::/user')
+    getUser(token, callback){
+        return MOCK_DELAY(callback, MockUser, 'mock::get::/user')
     }
 
-    getDirectory(token, callback, notify){
-        return MOCK_DELAY(callback, MockProfiles, notify, 'mock::get::/directory')
+    getDirectory(token, callback){
+        return MOCK_DELAY(callback, MockProfiles, 'mock::get::/directory')
+    }
+
+    deleteComment(token, profileId, callback){
+        return MOCK_DELAY(callback, MockProfile, 'mock::delete::/comment')
+    }
+
+    updateComment(token, options, callback){
+        var profile = MockProfile
+        profile.comments.push({'user': MockUser.id, 'comment': options['comment']})
+        console.log(profile)
+        return MOCK_DELAY(callback, profile, 'mock::post::/comment')
+    }
+
+    getImage(token, profileId, callback){
+        var logoUrl = "callbackUrl"
+        return MOCK_DELAY(callback, logoUrl, `mock::get::/img/${profileId}`)
     }
 
 }

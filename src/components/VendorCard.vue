@@ -32,7 +32,7 @@
           icon-right="comment"
           size="md"
           color="primary"
-          :label="profile.votes"
+          :label="profile.comments.length"
         />
       </div>
       <div class="row justify-end col-3">

@@ -1,0 +1,27 @@
+{
+    "id": "125",
+    "desc": "From mock profiles",
+    "logo": "/logos/3.png",
+    "short": "TestDescription",
+    "status": "published",
+    "tags": {
+        "promoted": true,
+        "featured": true
+    },
+    "title": "XYZ",
+    "votes": 0,
+    "comments": [
+        {
+            "user": "anonymous",
+            "comment": "My fave."
+        },
+        {
+            "user": "anonymous",
+            "comment": "My fave2."
+        },
+        {
+            "user": "anonymous",
+            "comment": "My fave3."
+        }
+    ]
+}
