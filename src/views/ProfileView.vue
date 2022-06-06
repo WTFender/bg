@@ -115,12 +115,12 @@ export default {
     }
     // or 404
     if (!profileFound){this.$router.push({name:'404'})}
-    this.loadLogo('test.jpg')
+    //this.loadLogo('test.jpg')
   },
   methods: {
     loadLogo(profileId){
       console.log(`load logo ${profileId}`)
-      this.$api.getImage(this.$oidc.accessToken, profileId, this.setLogo)
+      //this.$api.getImage(this.$oidc.accessToken, profileId, this.setLogo)
     },
     setLogo(url){
       console.log(`set logo ${url}`)
@@ -139,8 +139,8 @@ export default {
     updateUserComment(comment){
       this.$emit('updateComment', this.profile.id, comment)
     },
-    isUserComment(id) {
-      if (this.user.id==id){ 
+    isUserComment(user) {
+      if (this.user.email==user){ 
         this.hasCommented = true
         return true
       }
