@@ -57,6 +57,18 @@ class Api {
         }).then((response) => callback(response.data))
     }
 
+    delete(path, token, payload, callback) {
+        return this.service.request({
+            method: 'DELETE',
+            url: path,
+            responseType: 'json',
+            data: payload,
+            headers: {
+                'Authorization': token
+            }
+        }).then((response) => callback(response.data))
+    }
+
     getUser(token, callback){
         this.get('/user', token, callback)
     }
@@ -68,6 +80,10 @@ class Api {
     updateComment(token, profileId, comment, callback){
         var payload = {'profileId': profileId, 'comment': comment}
         this.post('/comment', token, payload, callback)
+    }
+
+    deleteComment(token, profileId, callback){
+        this.delete('/comment', token, {'profileId': profileId}, callback)
     }
 
 }
